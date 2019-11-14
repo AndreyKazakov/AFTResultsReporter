@@ -1,3 +1,5 @@
+package testCaseDetails;
+
 public class Failure {
 
     private String message;

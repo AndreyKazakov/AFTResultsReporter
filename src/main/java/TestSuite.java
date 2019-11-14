@@ -5,7 +5,7 @@ public class TestSuite {
     private String uid;
     private String name;
     private String title;
-    private Time time;
+    private TestTime testTime;
     private TestSuiteStatistic statistic;
     private String description;
     private List<TestCase> testCases;

@@ -1,3 +1,5 @@
+package testCaseDetails;
+
 public class Attachment {
 
     private String title;

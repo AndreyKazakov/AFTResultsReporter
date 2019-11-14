@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        for (TestSuite ts : Xunit.getTestSuitesListByNumberOfFailedTestCases(2)) {
+        for (TestSuite ts: Xunit.getTestSuitesList()) {
 
         }
 

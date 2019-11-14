@@ -33,15 +33,6 @@ public class Xunit {
         return getInstance().testSuites;
     }
 
-    public static TestSuite getTestSuite(String name) {
-        for (TestSuite ts: getInstance().testSuites) {
-            if(ts.getName().equals(name)) {
-                return ts;
-            }
-        }
-        return null;
-    }
-
     public static List<TestSuite> getTestSuitesListByNumberOfFailedTestCases(int failedNumber) {
         List<TestSuite> testSuitesWithFailedTestCases = new ArrayList<TestSuite>();
         for (TestSuite ts: getInstance().testSuites) {

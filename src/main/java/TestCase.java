@@ -3,7 +3,7 @@ public class TestCase {
     private String uid;
     private String name;
     private String title;
-    private Time time;
+    private TestTime testTime;
     private String severity;
     private String status;
 

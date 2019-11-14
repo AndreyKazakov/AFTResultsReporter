@@ -1,10 +1,13 @@
+package testCaseDetails;
+
+
 import java.util.List;
 
 public class Step {
 
     private String name;
     private String title;
-    private Time time;
+//    private TestTime time;
     private String status;
     private List<Attachment> attachments;
 
@@ -16,9 +19,9 @@ public class Step {
         return title;
     }
 
-    public Time getTime() {
-        return time;
-    }
+//    public TestTime getTime() {
+//        return time;
+//    }
 
     public String getStatus() {
         return status;

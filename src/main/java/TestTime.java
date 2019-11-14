@@ -1,4 +1,4 @@
-public class Time {
+public class TestTime {
 
     private long start;
     private long stop;
