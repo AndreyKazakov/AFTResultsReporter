@@ -1,6 +1,7 @@
 import com.google.gson.Gson;
 import exceptions.DeserializationException;
 import testCaseDetails.TestCaseDetails;
+import testCaseDetails.Step;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -62,6 +63,26 @@ public class Main {
 
 
 
+        //печатаем результаты
+        for (Map.Entry<String, ArrayList<TestCaseDetails>> entry: failedSuitesMap.entrySet()) {
+            System.out.println("TestSuite: "+ entry.getKey());
+            int i = 1;
+            for (TestCaseDetails tcd : entry.getValue()) {
+                System.out.println("TestCase "+i+": ");
+
+                for (Step s : tcd.getSteps()) {
+                    if (s.getStatus().equalsIgnoreCase("failed")) {
+                        System.out.println("Step: "+s.getName());
+                    }
+                }
+
+                System.out.println("Message: "+tcd.getFailure().getMessage());
+
+                i++;
+
+
+            }
+        }
 
 
     }
