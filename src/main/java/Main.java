@@ -37,7 +37,7 @@ public class Main {
 
         //в отобранных testSuites находим id каждого зафейленного testCase. а по нему находим файл с деталями тесткейса и переводим его в java объект.
         // на выходе имеем карту TestSuite - FailedTestCaseDetails
-        HashMap<String, ArrayList<TestCaseDetails>> failedSuitesMap = new HashMap<String, ArrayList<TestCaseDetails>>();
+        HashMap<TestSuite, ArrayList<TestCaseDetails>> failedSuitesMap = new HashMap<TestSuite, ArrayList<TestCaseDetails>>();
 
         for (TestSuite ts : testSuitesWithFailedTestCases) {
 
@@ -58,14 +58,15 @@ public class Main {
                     failedTestCases.add(tcd);
                 }
             }
-            failedSuitesMap.put(ts.getName(), failedTestCases);
+            failedSuitesMap.put(ts, failedTestCases);
         }
 
 
 
         //печатаем результаты
-        for (Map.Entry<String, ArrayList<TestCaseDetails>> entry: failedSuitesMap.entrySet()) {
-            System.out.println("TestSuite: "+ entry.getKey());
+        for (Map.Entry<TestSuite, ArrayList<TestCaseDetails>> entry: failedSuitesMap.entrySet()) {
+            System.out.println("TestSuite: "+ entry.getKey().getName());
+
             int i = 1;
             for (TestCaseDetails tcd : entry.getValue()) {
                 System.out.println("TestCase "+i+": ");
@@ -73,15 +74,20 @@ public class Main {
                 for (Step s : tcd.getSteps()) {
                     if (s.getStatus().equalsIgnoreCase("failed")) {
                         System.out.println("Step: "+s.getName());
+                        break;
                     }
                 }
 
                 System.out.println("Message: "+tcd.getFailure().getMessage());
 
+                String screenshotUrl = TestProperties.getInstance().getProperties().getProperty("reportServer");
+                screenshotUrl += "/reports/"+TestProperties.getInstance().getProperties().getProperty("buildNumber");
+                screenshotUrl += "/#xUnit/" +tcd.getUid() + "/" ;
                 i++;
 
-
             }
+
+            System.out.println("---------------------------------------------");
         }
 
 
