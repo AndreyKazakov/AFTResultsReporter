@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import exceptions.DeserializationException;
+import testCaseDetails.Attachment;
 import testCaseDetails.TestCaseDetails;
 import testCaseDetails.Step;
 
@@ -72,17 +73,27 @@ public class Main {
                 System.out.println("TestCase "+i+": ");
 
                 for (Step s : tcd.getSteps()) {
-                    if (s.getStatus().equalsIgnoreCase("failed")) {
+                    if (s.getStatus().equalsIgnoreCase("failed") || s.getStatus().equalsIgnoreCase("broken")) {
                         System.out.println("Step: "+s.getName());
+
+
+                        for (Attachment att: s.getAttachments()) {
+                            String attachmentUrl = TestProperties.getInstance().getProperties().getProperty("reportServer") +
+                                    "/reports/" + TestProperties.getInstance().getProperties().getProperty("buildNumber") +
+                                    "/#xUnit/" + entry.getKey().getUid() + "/" + tcd.getUid() + "/" + att.getUid() + "?expanded=true";
+                            if (att.getType().contains("image")) {
+                                System.out.println("Screenshot: " + attachmentUrl);
+                            }
+                            if (att.getType().contains("text")) {
+                                System.out.println("HAR: " + attachmentUrl);
+                            }
+                        }
                         break;
                     }
                 }
 
                 System.out.println("Message: "+tcd.getFailure().getMessage());
 
-                String screenshotUrl = TestProperties.getInstance().getProperties().getProperty("reportServer");
-                screenshotUrl += "/reports/"+TestProperties.getInstance().getProperties().getProperty("buildNumber");
-                screenshotUrl += "/#xUnit/" +tcd.getUid() + "/" ;
                 i++;
 
             }

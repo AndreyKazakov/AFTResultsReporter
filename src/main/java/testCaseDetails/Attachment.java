@@ -5,6 +5,7 @@ public class Attachment {
     private String title;
     private String source;
     private String type;
+    private String uid;
 
     public String getTitle() {
         return title;
@@ -17,4 +18,6 @@ public class Attachment {
     public String getType() {
         return type;
     }
+
+    public String getUid() { return uid; }
 }
