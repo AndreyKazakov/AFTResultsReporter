@@ -16,7 +16,7 @@ public class Xunit {
         if (INSTANCE == null) {
             String jsonString = null;
             try {
-                jsonString = new String(Files.readAllBytes(Paths.get(TestProperties.getInstance().getProperties().getProperty("xunitPath"))));
+                jsonString = new String(Files.readAllBytes(Paths.get(TestProperties.getInstance().getProperties().getProperty("resultsFolder")+"xunit.json")));
                 Gson g = new Gson();
                 INSTANCE = g.fromJson(jsonString, Xunit.class);
                 return INSTANCE;
