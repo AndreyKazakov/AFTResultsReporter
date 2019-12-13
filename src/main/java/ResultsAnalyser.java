@@ -18,6 +18,8 @@ public class ResultsAnalyser {
 
     private static List<TestSuite> testSuitesWithFailedTestCases;
 
+    private static HashMap<TestSuite, ArrayList<FailDetails>> failedSuitesDetailsMap;
+
     public static List<TestSuite> getTestSuitesWithFailedTestCases() {
         //если кол-во перезапусков 1 или более, т.е. запусков 2 и более, то берем testSuites с 2мя и более падениями.
         //иначе c одним и более падением
@@ -40,7 +42,6 @@ public class ResultsAnalyser {
 
         return testSuitesWithFailedTestCases;
     }
-
 
 
 
@@ -73,46 +74,46 @@ public class ResultsAnalyser {
         return failedSuitesMap;
     }
 
+    //собираем данные в о всех деталях падения каждого тест-кейса, и сохраняем в Мапе (TestSuite- ArrayList<FailDetails>)
+    public static HashMap<TestSuite, ArrayList<FailDetails>> getFailedSuitesDetailsMap() {
 
+        failedSuitesDetailsMap = new HashMap<TestSuite, ArrayList<FailDetails>>();
 
-
-    //печатаем результаты
-    public static void printResultsToConsole() {
         for (Map.Entry<TestSuite, ArrayList<TestCaseDetails>> entry : getFailedSuitesMap().entrySet()) {
-                System.out.println("TestSuite: " + entry.getKey().getName());
 
+                ArrayList<FailDetails> failDetailsList = new ArrayList<FailDetails>();
                 int i = 1;
                 for (TestCaseDetails tcd : entry.getValue()) {
-                    System.out.println("TestCase " + i + ": ");
+                    FailDetails failDetails = new FailDetails();
+                    failDetails.number = i;
+                    failDetails.errorMessage = tcd.getFailure().getMessage();
 
                     for (Step s : tcd.getSteps()) {
                         if (s.getStatus().equalsIgnoreCase("failed") || s.getStatus().equalsIgnoreCase("broken")) {
-                            System.out.println("Step: " + s.getName());
-
+                            failDetails.step = s.getName();
+                            List<String> screenshotsList = new ArrayList<String>();
 
                             for (Attachment att : s.getAttachments()) {
                                 String attachmentUrl = TestProperties.getInstance().getProperties().getProperty("reportServer") +
                                         "/reports/" + TestProperties.getInstance().getProperties().getProperty("buildNumber") +
                                         "/#xUnit/" + entry.getKey().getUid() + "/" + tcd.getUid() + "/" + att.getUid() + "?expanded=true";
                                 if (att.getType().contains("image")) {
-                                    System.out.println("Screenshot: " + attachmentUrl);
+                                    screenshotsList.add(attachmentUrl);
                                 }
                                 if (att.getType().contains("text")) {
-                                    System.out.println("HAR: " + attachmentUrl);
+                                    failDetails.har = attachmentUrl;
                                 }
                             }
+                            failDetails.screenshotsList = screenshotsList;
                             break;
                         }
                     }
-
-                    System.out.println("Message: " + tcd.getFailure().getMessage());
-
+                    failDetailsList.add(failDetails);
                     i++;
-
                 }
-
-                System.out.println("---------------------------------------------");
+                failedSuitesDetailsMap.put(entry.getKey(), failDetailsList);
             }
+            return failedSuitesDetailsMap;
     }
 
 }

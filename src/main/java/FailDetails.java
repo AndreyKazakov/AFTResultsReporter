@@ -5,5 +5,5 @@ public class FailDetails {
     String errorMessage;
     String step;
     List<String> screenshotsList;
-    List<String> harList;
+    String har;
 }
