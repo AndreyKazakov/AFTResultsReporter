@@ -86,7 +86,9 @@ public class ResultsAnalyser {
                 for (TestCaseDetails tcd : entry.getValue()) {
                     FailDetails failDetails = new FailDetails();
                     failDetails.number = i;
-                    failDetails.errorMessage = tcd.getFailure().getMessage();
+
+                    String[] tmpMessage = tcd.getFailure().getMessage().split("Build info:");
+                    failDetails.errorMessage = tmpMessage[0];
 
                     for (Step s : tcd.getSteps()) {
                         if (s.getStatus().equalsIgnoreCase("failed") || s.getStatus().equalsIgnoreCase("broken")) {
